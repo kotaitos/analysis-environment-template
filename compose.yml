@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+  server:
+    build: ./
+    tty: true
+    working_dir: /workspace
+    ports:
+      - "${PORT:?err}:${PORT:?err}"
+    depends_on:
+      - db
+    volumes:
+      - ./:/workspace
+    environment:
+      PORT: ${PORT:?err}
+      DB_HOST: ${DB_HOST:?err}
+      DB_NAME: ${DB_NAME:?err}
+      DB_USER: ${DB_USER:?err}
+      DB_PASSWORD: ${DB_PASSWORD:?err}
+
+  db:
+    image: mysql:latest
+    ports:
+      - "${MYSQL_PORT:?err}:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?err}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:?err}
+      MYSQL_USER: ${MYSQL_USER:?err}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:?err}
+    volumes:
+      - ./mysql:/var/lib/mysql
